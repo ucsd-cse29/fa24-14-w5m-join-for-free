@@ -13,7 +13,9 @@ typedef struct String String;
 
 String new_String(char* init_contents) {
     uint64_t size = strlen(init_contents);
-    String r = { size, init_contents };
+    char* contents = malloc(size + 1);
+    strcpy(contents, init_contents);
+    String r = { size, contents };
     return r;
 }
 
@@ -31,9 +33,13 @@ String plus(String s1, String s2) {
 String join(String strs[], int count, String delimiter) {
     String s = new_String("");
     for(int i = 0; i < count; i += 1) {
+        char* before_plus = s.contents;
         s = plus(s, strs[i]);
+        free(before_plus);
         if(i < count - 1) {
+            char* before_plus = s.contents;
             s = plus(s, delimiter);
+            free(before_plus);
         }
     }
     return s;
@@ -45,6 +51,13 @@ int main() {
     String strawberry = new_String("strawberry");
     String fruit[] = { apple, banana, strawberry };
 
-    String fruitlist = join(fruit, 3, new_String(", "));
+    String comma = new_String(", ");
+    String fruitlist = join(fruit, 3, comma);
     printf("%s\n", fruitlist.contents);
+    
+    free(apple.contents);
+    free(banana.contents);
+    free(strawberry.contents);
+    free(fruitlist.contents);
+    free(comma.contents);
 }
