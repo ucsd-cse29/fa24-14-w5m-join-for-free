@@ -5,8 +5,8 @@
 #include <assert.h>
 
 struct String {
-    uint64_t length;    // should always equal strlen(contents)
-    char* contents;     // should always have allocated space of length + 1, including null terminator
+    uint64_t length;
+    char* contents;
 };
 
 typedef struct String String;
