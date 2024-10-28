@@ -51,3 +51,41 @@ int main() {
     String fruitlist = join(fruit, 3, comma);
     printf("%s\n", fruitlist.contents);
 }
+
+
+
+
+String joinfree(String strs[], int count, String delimiter) {
+    String s = new_String("");
+    for(int i = 0; i < count; i += 1) {
+        char* before_plus = s.contents;
+        s = plus(s, strs[i]);
+        free(before_plus);
+        if(i < count - 1) {
+            char* before_plus = s.contents;
+            s = plus(s, delimiter);
+            free(before_plus);
+        }
+    }
+    return s;
+}
+
+String join_nogarbage(String strs[], int count, String delimiter) {
+    int total_length = 0;
+    for(int i = 0; i < count; i += 1) {
+        total_length += strs[i].length;
+        if(i < count - 1) { total_length += delimiter.length; }
+    }
+    char* new_contents = malloc(total_length + 1);
+    int index = 0;
+    for(int i = 0; i < count; i += 1) {
+        strcpy(new_contents + index, strs[i].contents);
+        if(i < count - 1) {
+            strcpy(new_contents + index + strs[i].length, delimiter.contents);
+        }
+        index += strs[i].length + delimiter.length;
+    }
+    new_contents[total_length - 1] = 0;
+    String r = { total_length, new_contents };
+    return r;
+}
